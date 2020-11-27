@@ -18,6 +18,7 @@ const LineChartWidget = (props) => {
   const scaleType = props.data.scaleType
   const datesAdjusted = props.data.datesAdjusted
   const casesType = props.data.casesType
+  const dataType = props.data.dataType
 
   const [selectedCountries, setSelectedCountries] = useState([])
   const [initBool, setInitBool] = useState(true)
@@ -27,8 +28,22 @@ const LineChartWidget = (props) => {
   const [onMouseHover, setOnMouseHover] = useState(false)
 
   const animatedComponents = makeAnimated()
-  const yMaxRangeLinearNewCases = casesType === 'confirmed' ? 160000 : 2500
-  const yMaxRangeLogNewCases = casesType === 'confirmed' ? 1000000 : 10000
+  const yMaxRangeLinearNewCases =
+    casesType === 'confirmed'
+      ? dataType === 'cumulative'
+        ? 10000000
+        : 200000
+      : dataType === 'cumulative'
+      ? 250000
+      : 2500
+  const yMaxRangeLogNewCases =
+    casesType === 'confirmed'
+      ? dataType === 'cumulative'
+        ? 10000000
+        : 1000000
+      : dataType === 'cumulative'
+      ? 250000000
+      : 10000
   const tickValuesNewCases = []
   const defaultCountry = {
     value: 'India',
@@ -50,8 +65,6 @@ const LineChartWidget = (props) => {
     '#8e44ad',
     '#2c3e50',
   ]
-
-  console.log(casesType)
 
   if (data.length == 0) {
     return (
