@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { processLogData, filterCases } from '../utils'
+import { processCumulativeData} from '../utils'
 import LineChartWidget from './LineChartWidget'
 
 const LineChart = (props) => {
@@ -24,7 +25,7 @@ const CovidDashboard = (props) => {
   const newDeaths = filterCases(props.data, 'new_deaths')
 
   const [casesType, setCasesType] = useState('confirmed')
-  const [dataType, setDataType] = useState('')
+  const [dataType, setDataType] = useState('new')
   const [scaleType, setScaleType] = useState('linear')
   const [datesAdjusted, setDatesAdjusted] = useState('off')
 
@@ -39,11 +40,13 @@ const CovidDashboard = (props) => {
   }
 
   if (casesType === 'confirmed') {
-    propsData.data = scaleType === 'log' ? processLogData(newCases) : newCases
+    const initData = dataType === 'cumulative' ? processCumulativeData(newCases) : newCases
+    propsData.data = scaleType === 'log' ? processLogData(initData) : initData
     propsData.lineHeading = 'Graphical representation of New Cases of COVID-19'
     propsData.lineLabel = 'New Cases'
   } else if (casesType === 'deaths') {
-    propsData.data = scaleType === 'log' ? processLogData(newDeaths) : newDeaths
+    const initData = dataType === 'cumulative' ? processCumulativeData(newDeaths) : newDeaths
+    propsData.data = scaleType === 'log' ? processLogData(initData) : initData
     propsData.lineHeading = 'Graphical representation of Deaths of COVID-19'
     propsData.lineLabel = 'Deaths'
   }
@@ -89,21 +92,21 @@ const CovidDashboard = (props) => {
             <div className='radio-title'>Data type</div>
             <input
               type='radio'
-              id='new'
-              name='data-type'
-              value='new'
-              onChange={(e) => _handleDataType(e)}
-            />
-            <label htmlFor='new'>New</label>
-            <input
-              type='radio'
               id='cumulative'
               name='data-type'
               value='cumulative'
-              defaultChecked
               onChange={(e) => _handleDataType(e)}
             />
             <label htmlFor='cumulative'>Cumulative</label>
+            <input
+              type='radio'
+              id='new'
+              name='data-type'
+              value='new'
+              defaultChecked
+              onChange={(e) => _handleDataType(e)}
+            />
+            <label htmlFor='new'>New</label>
           </div>
           <div className='radio-toolbar m-3'>
             <div className='radio-title'>Show Scale as</div>
