@@ -36,7 +36,7 @@ export const processCumulativeData = (rawData) => {
       acc = acc + parseInt(d.y)
       const tempNode = {
         x : d.x,
-        y: acc
+        y: acc.toString()
       }
       return tempNode
     })

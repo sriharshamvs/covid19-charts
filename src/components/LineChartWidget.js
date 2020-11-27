@@ -42,7 +42,7 @@ const LineChartWidget = (props) => {
         ? 10000000
         : 1000000
       : dataType === 'cumulative'
-      ? 250000000
+      ? 2500000
       : 10000
   const tickValuesNewCases = []
   const defaultCountry = {
